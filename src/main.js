@@ -1,7 +1,9 @@
 const electron = require('electron');
+const countdown = require('./countdown');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const ipc = electron.ipcMain
 
 app.on('ready', _ => {
     mainWindow = new BrowserWindow({
@@ -13,5 +15,11 @@ app.on('ready', _ => {
 
     mainWindow.on('closed', _ => {
         mainWindow = null;
+    });
+});
+
+ipc.on('countdown-start', _ => {
+    countdown(count => {
+        mainWindow.webContents.send('countdown', count);
     });
 });
